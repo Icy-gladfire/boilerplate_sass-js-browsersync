@@ -16,8 +16,11 @@
     "browser-sync": "^2.18.13",
     "gulp": "^3.9.1",
     "gulp-concat": "^2.6.1",
+    "gulp-jshint": "^2.0.4",
     "gulp-sass": "^3.1.0",
     "gulp-sourcemaps": "^2.6.1",
+    "jshint": "^2.9.5",
+    "jshint-stylish": "^2.2.1",
     "scrollmagic": "^2.0.5"
   }
 }

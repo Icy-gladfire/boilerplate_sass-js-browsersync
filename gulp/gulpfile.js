@@ -1,27 +1,40 @@
 var gulp = require('gulp'),
+    jshint = require('gulp-jshint'),
+    stylish = require('jshint-stylish'),
     browserSync = require('browser-sync').create(),
     sass = require('gulp-sass'),
     sourcemaps = require('gulp-sourcemaps'),
     concat = require('gulp-concat');
 
 var cssSources,
+    jsVendorSources,
+    jsCustomSources,
     jsSources;
 
 cssSources = ['sass/**/*.scss'];
-jsSources = [
+jsVendorSources = [
     'js/vendor/jquery-3.2.1.min.js',
     //'jsvendor/gsap/jquery.gsap.min.js',
     'js/vendor/gsap/TweenMax.min.js',
     'js/vendor/scrollmagic/uncompressed/ScrollMagic.js',
     'js/vendor/scrollmagic/uncompressed/plugins/animation.gsap.js',
-    'js/vendor/scrollmagic/uncompressed/plugins/debug.addIndicators.js',
+    'js/vendor/scrollmagic/uncompressed/plugins/debug.addIndicators.js'
+];
+jsCustomSources = [
     'js/main.js'
 ];
+jsSources = jsVendorSources.concat(jsCustomSources);
 
 
+//check JS with jshint and use jshint-stylish for error report
+gulp.task('lint', function(){
+    return gulp.src(jsCustomSources)
+        .pipe(jshint())
+        .pipe(jshint.reporter(stylish))
+});
 
 // concat js files
-gulp.task('scripts', function() {
+gulp.task('scripts', ['lint'], function() {
     return gulp.src(jsSources)
         .pipe(sourcemaps.init())
         .pipe(concat('main.js'))
@@ -53,4 +66,4 @@ gulp.task('serve', ['sass'], function() {
     gulp.watch("../*.html").on('change', browserSync.reload);
 });
 
-gulp.task('default', ['scripts', 'sass',  'serve']);
+gulp.task('default', ['lint', 'scripts', 'sass',  'serve']);
